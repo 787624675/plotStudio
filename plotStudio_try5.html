@@ -7428,7 +7428,8 @@
                                                                         <path
                                                                             d="M0 8c0 1.5 1.188 2.688 2.688 2.688C4.126 10.688 5.313 9.5 5.313 8S4.125 5.312 2.688 5.312A2.668 2.668 0 0 0 0 8zm10.688 8c0 1.5 1.188 2.688 2.625 2.688 1.5 0 2.688-1.188 2.688-2.688s-1.188-2.688-2.688-2.688c-1.438 0-2.625 1.188-2.625 2.688zM16 9.313c0 1.5 1.188 2.688 2.688 2.688 1.438 0 2.625-1.188 2.625-2.688a2.64 2.64 0 0 0-2.625-2.625c-1.5 0-2.688 1.188-2.688 2.625zM5.313 24c0 1.5 1.188 2.688 2.688 2.688S10.689 25.5 10.689 24c0-1.5-1.188-2.688-2.688-2.688S5.313 22.5 5.313 24zm16-4c0 1.5 1.188 2.688 2.688 2.688S26.689 21.5 26.689 20c0-1.5-1.188-2.688-2.688-2.688S21.313 18.5 21.313 20zm5.375-8c0 1.5 1.188 2.688 2.625 2.688 1.5 0 2.688-1.188 2.688-2.688s-1.188-2.688-2.688-2.688c-1.438 0-2.625 1.188-2.625 2.688z">
                                                                         </path>
-                                                                    </svg></div>Scatter
+                                                                    </svg></div>
+                                                                    <a id="type1-1">Scatter</a>
                                                             </div><svg class="mdi-icon menupanel__icon" width="24"
                                                                 height="24" fill="currentColor" viewBox="0 0 24 24">
                                                                 <path
@@ -13140,12 +13141,56 @@
 
         }
         currentTrace = 0
+        var traces = []
+        var types = []
         function setTrace(traceId){
-            currentTrace = traceId;
+            currentTrace = parseInt(traceId.charAt(traceId.length - 1)) - 1;
         }
         function setTraceType(traceTypeId){
-            
+            // alert(currentTrace)
             // traces[currentTrace] = traceconfig;
+            // alert(traceTypeId)
+            if(traceTypeId === 'scatter'){
+                traces[currentTrace].mode = 'markers'
+                traces[currentTrace].type = 'scatter'
+               
+            }
+            else if(traceTypeId === 'bar'){
+                traces[currentTrace].type = 'bar'
+
+
+            }
+            else if(traceTypeId === 'line'){
+                traces[currentTrace].mode = 'lines'
+                traces[currentTrace].type = 'scatter'
+            }
+            else if(traceTypeId === 'area'){
+                traces[currentTrace].fill = 'tozeroy'
+                traces[currentTrace].type = 'scatter'
+
+
+            }
+            else if(traceTypeId === 'heatmap'){
+                var new_trace = {
+                    z:data,
+                    type:'heatmap'
+                }
+                traces[currentTrace] = new_trace
+            }
+            else if(traceTypeId == 'pie'){
+                var new_trace = {
+                    values : traces[currentTrace].x,
+                    labels : traces[currentTrace].y,
+                    type: 'pie'
+
+                }
+                traces[currentTrace] = new_trace
+
+            }
+
+            Plotly.redraw('plot_panel', traces, layout, config)
+            document.getElementById('type1-1').innerHTML=traceTypeId
+            closeWindow('window1')
 
         }
         function closeWindow(windowId) {
@@ -13179,8 +13224,7 @@
 
         }
 
-        var traces = []
-        var types = []
+        
         var trace1 = {
             x: [1, 2, 3, 4],
             y: [10, 15, 13, 17],
